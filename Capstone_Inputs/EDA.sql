@@ -113,7 +113,7 @@ SELECT dept_name, min(Age), max(Age), avg(Age)
 FROM (
         SELECT
             dept_name, e.emp_no, year(maxDate)-year(birth_date) Age
-        FROM Employees e, a
+        FROM Employees e CROSS JOIN a
         JOIN dept_emp3 de ON e.emp_no = de.emp_no
         JOIN departments d ON de.dept_no = d.dept_no 
         )a1
@@ -132,17 +132,21 @@ ORDER BY Emp_Count DESC;
 -- 15 Average Tenure Distribution accross Departments
 WITH a AS
 (SELECT greatest(max(last_date), max(hire_date)) maxDate 
-FROM employees)
+FROM employees),
+dept_emp3 AS
+(SELECT a.emp_no, a.dept_no 
+FROM(SELECT *, row_number() over(PARTITION BY emp_no ORDER BY dept_no DESC) rnk FROM dept_emp)a
+WHERE a.rnk = 1)
 SELECT 
     avg(CASE WHEN last_date IS NULL 
             THEN datediff(maxDate,hire_date)
     ELSE datediff(last_date,hire_date) END) AS Avg_Tenure_Years, 
     dept_name
-FROM employees e,a
-JOIN dept_emp de ON e.emp_no = de.emp_no
+FROM employees e CROSS JOIN a
+JOIN dept_emp3 de ON e.emp_no = de.emp_no
 JOIN departments d ON de.dept_no = d.dept_no
 GROUP BY dept_name
-ORDER BY Avg_Tenure_Years DESC
+ORDER BY Avg_Tenure_Years DESC;
 
 --16 Average Tenure Distribution accross Titles
 WITH a AS
@@ -153,7 +157,7 @@ SELECT
             THEN datediff(maxDate,hire_date)
     ELSE datediff(last_date,hire_date) END) AS Avg_Tenure_Years, 
     title
-FROM employees_at e
+FROM employees e CROSS JOIN a
 JOIN titles t ON e.emp_title_id = t.title_id
 GROUP BY title
 ORDER BY Avg_Tenure_Years DESC;
