@@ -10,7 +10,7 @@ docker exec -w /workspaces/BigData-Engineering-Capstone-Project mysql mysql -u d
 # HDFS and Sqoop commands routed to namenode container
 docker exec namenode hdfs dfs -rm -r /user/doan2506/hive/warehouse/Capstone
 docker exec namenode hdfs dfs -mkdir -p /user/doan2506/hive/warehouse/Capstone
-docker exec namenode sqoop import-all-tables --connect jdbc:mysql://mysql:3306/doan2506 --username doan2506 --password Bigdata123 --compression-codec=snappy --as-avrodatafile --warehouse-dir=/user/doan2506/hive/warehouse/Capstone --m 1 --driver com.mysql.jdbc.Driver
+docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode sqoop import-all-tables --connect jdbc:mysql://mysql:3306/doan2506 --username doan2506 --password Bigdata123 --compression-codec=snappy --as-avrodatafile --warehouse-dir=/user/doan2506/hive/warehouse/Capstone --m 1 --driver com.mysql.jdbc.Driver
 
 docker exec namenode hdfs dfs -rm -r /user/doan2506/hive/avsc
 docker exec namenode hdfs dfs -mkdir -p /user/doan2506/hive/avsc
