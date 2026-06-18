@@ -6,21 +6,21 @@ mkdir -p /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs
 cp -r /workspaces/BigData-Engineering-Capstone-Project/Capstone_Inputs/* /workspaces/BigData-Engineering-Capstone-Project/
 
 # MySQL commands routed to mysql container
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project mysql mysql -u doan2506 -pBigdata123 -D doan2506 -e "source CreateMySQLTables.sql" > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_MySQLTables.txt
+docker exec -w /workspaces/BigData-Engineering-Capstone-Project mysql mysql --local-infile=1 -u doan2506 -pBigdata123 -D doan2506 -e "source CreateMySQLTables.sql" > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_MySQLTables.txt
 
 # HDFS and Sqoop commands routed to namenode container
 docker exec namenode hdfs dfs -rm -r /user/doan2506/hive/warehouse/Capstone
 docker exec namenode hdfs dfs -mkdir -p /user/doan2506/hive/warehouse/Capstone
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode sqoop import-all-tables --connect jdbc:mysql://mysql:3306/doan2506 --username doan2506 --password Bigdata123 --compression-codec=snappy --as-avrodatafile --warehouse-dir=/user/doan2506/hive/warehouse/Capstone --m 1 --driver com.mysql.jdbc.Driver
+docker exec namenode sqoop import-all-tables --connect jdbc:mysql://mysql:3306/doan2506 --username doan2506 --password Bigdata123 --compression-codec=snappy --as-avrodatafile --warehouse-dir=/user/doan2506/hive/warehouse/Capstone --m 1 --driver com.mysql.jdbc.Driver
 
 docker exec namenode hdfs dfs -rm -r /user/doan2506/hive/avsc
 docker exec namenode hdfs dfs -mkdir -p /user/doan2506/hive/avsc
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode hdfs dfs -put departments.avsc /user/doan2506/hive/avsc/departments.avsc
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode hdfs dfs -put titles.avsc /user/doan2506/hive/avsc/titles.avsc
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode hdfs dfs -put employees.avsc /user/doan2506/hive/avsc/employees.avsc
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode hdfs dfs -put dept_manager.avsc /user/doan2506/hive/avsc/dept_manager.avsc
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode hdfs dfs -put dept_emp.avsc /user/doan2506/hive/avsc/dept_emp.avsc
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project namenode hdfs dfs -put salaries.avsc /user/doan2506/hive/avsc/salaries.avsc
+docker exec namenode hdfs dfs -put /departments.avsc /user/doan2506/hive/avsc/departments.avsc
+docker exec namenode hdfs dfs -put /titles.avsc /user/doan2506/hive/avsc/titles.avsc
+docker exec namenode hdfs dfs -put /employees.avsc /user/doan2506/hive/avsc/employees.avsc
+docker exec namenode hdfs dfs -put /dept_manager.avsc /user/doan2506/hive/avsc/dept_manager.avsc
+docker exec namenode hdfs dfs -put /dept_emp.avsc /user/doan2506/hive/avsc/dept_emp.avsc
+docker exec namenode hdfs dfs -put /salaries.avsc /user/doan2506/hive/avsc/salaries.avsc
 docker exec namenode hadoop fs -chmod +rwx /user/doan2506/hive/avsc/*
 docker exec namenode hadoop fs -chmod +rwx /user/doan2506/hive/warehouse/Capstone/*
 

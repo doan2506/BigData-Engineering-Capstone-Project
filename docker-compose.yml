@@ -71,6 +71,7 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql
+    command: --local-infile=1
     volumes:
       - .:/workspaces/BigData-Engineering-Capstone-Project
     environment:
