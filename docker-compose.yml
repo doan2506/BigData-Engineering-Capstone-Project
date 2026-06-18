@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   namenode:
-    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    build: 
+      context: .
+      dockerfile: Dockerfile-namenode
     container_name: namenode
     volumes:
       - ./hadoop_namenode:/hadoop/dfs/name
@@ -32,6 +34,8 @@ services:
   hive-server:
     image: bde2020/hive:2.3.2-postgresql-metastore
     container_name: hive-server
+    volumes:
+      - .:/workspaces/BigData-Engineering-Capstone-Project
     depends_on:
       - namenode
       - datanode
@@ -67,10 +71,12 @@ services:
   mysql:
     image: mysql:8.0
     container_name: mysql
+    volumes:
+      - .:/workspaces/BigData-Engineering-Capstone-Project
     environment:
       - MYSQL_ROOT_PASSWORD=Bigdata123
-      - MYSQL_DATABASE=anabig114212
-      - MYSQL_USER=anabig114212
+      - MYSQL_DATABASE=doan2506
+      - MYSQL_USER=doan2506
       - MYSQL_PASSWORD=Bigdata123
     ports:
       - "3306:3306"

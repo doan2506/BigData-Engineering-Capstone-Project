@@ -1,5 +1,5 @@
 -- Database
-USE anabig114212_cap;
+USE doan2506_cap;
 SHOW TABLES;
 -- Table Stats for Employees Table
 COMPUTE STATS employees;

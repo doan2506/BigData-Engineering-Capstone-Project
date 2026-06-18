@@ -1,0 +1,23 @@
+FROM bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+
+USER root
+# Fix Debian Archive issue and install MySQL Client & wget
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
+    echo "deb http://archive.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list && \
+    apt-get update -o Acquire::Check-Valid-Until=false && \
+    apt-get install -y wget default-mysql-client
+
+# Download and extract Sqoop
+RUN wget https://archive.apache.org/dist/sqoop/1.4.7/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz && \
+    tar -xvf sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz && \
+    mv sqoop-1.4.7.bin__hadoop-2.6.0 /usr/local/sqoop && \
+    rm sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
+
+# Add missing Java libraries to Sqoop
+RUN wget https://repo1.maven.org/maven2/commons-lang/commons-lang/2.6/commons-lang-2.6.jar -P /usr/local/sqoop/lib/ && \
+    wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.28/mysql-connector-java-8.0.28.jar -P /usr/local/sqoop/lib/
+
+# Set Environment Variables for Sqoop
+ENV SQOOP_HOME=/usr/local/sqoop
+ENV PATH=$PATH:$SQOOP_HOME/bin
+ENV HADOOP_CONF_DIR=/etc/hadoop

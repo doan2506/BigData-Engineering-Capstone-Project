@@ -23,7 +23,7 @@ spark = SparkSession.builder.appName("Subham_Capstone").config(
     "thrift://ip-10-1-2-24.ap-south-1.compute.internal:9083").config(
         "spark.sql.catalogImplementation=hive").config(
         "spark.sql.warehouse.dir",
-        "hdfs://nameservice1/user/anabig114212/hive/Capstone").config(
+        "hdfs://nameservice1/user/doan2506/hive/Capstone").config(
             "spark.serializer",
     "org.apache.spark.serializer.KryoSerializer").enableHiveSupport().getOrCreate()
 spark.sparkContext.setLogLevel('OFF')
@@ -36,13 +36,13 @@ pd.set_option('display.max_columns', None)
 
 # Creating Local Views and Spark Dataframes to call these objects from memory.
 
-departments = spark.table('anabig114212_cap.departments')
+departments = spark.table('doan2506_cap.departments')
 departments.createOrReplaceTempView('departments')
 
-titles = spark.table('anabig114212_cap.titles')
+titles = spark.table('doan2506_cap.titles')
 titles.createOrReplaceTempView('titles')
 
-employees = spark.table('anabig114212_cap.employees')
+employees = spark.table('doan2506_cap.employees')
 employees = employees.withColumn('birth_date',
                                  to_date(col('birth_date'),
                                          'yyyy-MM-dd'))\
@@ -54,14 +54,14 @@ employees = employees.withColumn('birth_date',
                         'yyyy-MM-dd'))  # Converting to Proper date formats
 employees.createOrReplaceTempView('employees')
 
-dept_emp_raw = spark.table('anabig114212_cap.dept_emp')
-dept_emp = spark.table('anabig114212_cap.dept_emp1')
+dept_emp_raw = spark.table('doan2506_cap.dept_emp')
+dept_emp = spark.table('doan2506_cap.dept_emp1')
 dept_emp.createOrReplaceTempView('dept_emp')
 
-dept_manager = spark.table('anabig114212_cap.dept_manager')
+dept_manager = spark.table('doan2506_cap.dept_manager')
 dept_manager.createOrReplaceTempView('dept_manager')
 
-salaries = spark.table('anabig114212_cap.salaries')
+salaries = spark.table('doan2506_cap.salaries')
 salaries.createOrReplaceTempView('salaries')
 
 

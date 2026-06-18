@@ -1,4 +1,4 @@
-USE anabig114212_cap;
+USE doan2506_cap;
 
 SET mapreduce.input.fileinputformat.split.maxsize = 67108864;
 SET mapreduce.map.memory.mb = 2048;

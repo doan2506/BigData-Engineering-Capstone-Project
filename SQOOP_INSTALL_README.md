@@ -15,6 +15,9 @@ Run these commands in your Codespace terminal to enter the namenode and download
 # Enter the Namenode container as root
 docker exec -it namenode /bin/bash
 
+# Install wget first!
+apt-get update && apt-get install -y wget
+
 # Download and extract Sqoop
 wget https://archive.apache.org/dist/sqoop/1.4.7/sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
 tar -xvf sqoop-1.4.7.bin__hadoop-2.6.0.tar.gz
