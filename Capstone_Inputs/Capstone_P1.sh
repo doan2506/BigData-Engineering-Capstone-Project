@@ -3,6 +3,7 @@ find . -name "*.avsc" -exec rm {} \;
 find . -name "*.java" -exec rm {} \;
 rm -rf /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs
 mkdir -p /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs
+cp -r /workspaces/BigData-Engineering-Capstone-Project/Capstone_Inputs/* /workspaces/BigData-Engineering-Capstone-Project/
 
 # MySQL commands routed to mysql container
 docker exec -w /workspaces/BigData-Engineering-Capstone-Project mysql mysql -u doan2506 -pBigdata123 -D doan2506 -e "source CreateMySQLTables.sql" > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_MySQLTables.txt
@@ -24,9 +25,9 @@ docker exec namenode hadoop fs -chmod +rwx /user/doan2506/hive/avsc/*
 docker exec namenode hadoop fs -chmod +rwx /user/doan2506/hive/warehouse/Capstone/*
 
 # Hive commands routed to hive-server container
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project hive-server hive -f HiveDB.hql > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_HiveDB.txt
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project hive-server hive -f EDA.sql > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_ImpalaAnalysis.txt
-docker exec -w /workspaces/BigData-Engineering-Capstone-Project hive-server hive -f HiveTables.sql > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_HiveTables.txt
+docker exec -w /workspaces/BigData-Engineering-Capstone-Project hive-server hive --hiveconf hive.metastore.uris=thrift://hive-metastore:9083 -f HiveDB.hql > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_HiveDB.txt
+docker exec -w /workspaces/BigData-Engineering-Capstone-Project hive-server hive --hiveconf hive.metastore.uris=thrift://hive-metastore:9083 -f EDA.sql > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_ImpalaAnalysis.txt
+docker exec -w /workspaces/BigData-Engineering-Capstone-Project hive-server hive --hiveconf hive.metastore.uris=thrift://hive-metastore:9083 -f HiveTables.sql > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_HiveTables.txt
 
 # Spark commands routed to spark-master container
 docker exec -w /workspaces/BigData-Engineering-Capstone-Project spark-master spark-submit capstone.py > /workspaces/BigData-Engineering-Capstone-Project/Capstone_Outputs/Cap_SparkSQL_EDA_ML.txt
